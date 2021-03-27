@@ -44,10 +44,10 @@ class Porsche(discord.Client):
                 MA7, alert_7, MA25, alert_25 = calculate_MA(ohlcv_prices)
                 if alert_25 and symbol not in self.MA25_alerted:
                     self.MA25_alerted.append(symbol)
-                    await channel.send(f"{symbol} is close to MA25 line, last price is {last_price:.2f}, MA25 price is {MA25:.2f}")
+                    await channel.send(f"{symbol} is close to MA25 line, last price is {last_price:.7g}, MA25 price is {MA25:.7g}")
                 if alert_7 and symbol not in self.MA7_alerted:
                     self.MA7_alerted.append(symbol)
-                    await channel.send(f"{symbol} is close to MA7 line, last price is {last_price:.2f}, MA7 price is {MA7:.2f}")
+                    await channel.send(f"{symbol} is close to MA7 line, last price is {last_price:.7g}, MA7 price is {MA7:.7g}")
                 print(f"{symbol}: {last_price:.2f}")
             # await channel.send("Bot is still running")
             await asyncio.sleep(300)  # task runs every 5 minutes
