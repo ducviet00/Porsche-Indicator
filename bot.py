@@ -50,8 +50,8 @@ class Porsche(discord.Client):
                     self.MA7_alerted.append(symbol)
                     await channel.send(f"{symbol} is close to MA7 line, last price is {last_price},\
                             MA25 price is {MA7}")
-                await channel.send(f"{symbol}: {last_price}")
-            await channel.send("Bot is still running")
+                # await channel.send(f"{symbol}: {last_price}")
+            # await channel.send("Bot is still running")
             await asyncio.sleep(300)  # task runs every 5 minutes
 
     async def update_pairs(self):

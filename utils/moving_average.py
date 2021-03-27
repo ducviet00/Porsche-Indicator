@@ -7,8 +7,8 @@ def calculate_MA(ohlcv_prices):
     MA25 = np.mean(ohlcv_prices[-25:, 4])
     alert_7 = False
     alert_25 = False
-    if last_price > MA7*1.01 and last_price < MA7*1.01:
+    if last_price > MA7*0.99 and last_price < MA7*1.01:
         alert_7 = True
-    if last_price > MA25*1.01 and last_price < MA25*1.01:
+    if last_price > MA25*0.99 and last_price < MA25*1.01:
         alert_25 = True
     return MA7, alert_7, MA25, alert_25
