@@ -5,3 +5,4 @@ def calculate_RSI(ohlcv_prices):
     last_price = ohlcv_prices[-1, 4]
     close_prices = ohlcv_prices[:, 4]
     
+    
