@@ -65,9 +65,8 @@ class Porsche(discord.Client):
     async def update_pairs(self):
         await self.wait_until_ready()
         channel = self.get_channel(CHANNEL_ID)
-        self.watching_pairs = []
-
         while not self.is_closed():
+            self.watching_pairs = []
             btcusdt = self.exchange.fetchTicker('BTC/USDT')['last']
             for symbol in tqdm(self.exchange.markets):
                 if '/USDT' not in symbol:
