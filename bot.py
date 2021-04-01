@@ -49,7 +49,7 @@ class Porsche(discord.Client):
         print(self.user.id)
         print('------')
 
-    @tasks.loop(seconds=3600)
+    @tasks.loop(hours=1)
     async def see_the_future(self):
         await self.wait_until_ready()
         channel = self.get_channel(CHANNEL_ID)  # channel ID goes here
@@ -72,7 +72,7 @@ class Porsche(discord.Client):
                     print(f"TF{tf.upper()} {symbol}: Price {last_price}")
             # await channel.send("Bot is still running")
             
-    @tasks.loop(seconds=300)
+    @tasks.loop(minutes=5)
     async def rsi_noti(self):
         await self.wait_until_ready()
         channel = self.get_channel(CHANNEL_ID)  # channel ID goes here
@@ -90,8 +90,7 @@ class Porsche(discord.Client):
                         await channel.send(f"TF{tf.upper()}: {symbol}: RSI: {rsi_14}")
                     print(f"TF{tf.upper()} {symbol}: RSI14 {rsi_14}")
             
-
-    @tasks.loop(seconds=12*3600)
+    @tasks.loop(hours=12)
     async def update_pairs(self):
         await self.wait_until_ready()
         channel = self.get_channel(CHANNEL_ID)
