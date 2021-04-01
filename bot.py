@@ -1,14 +1,16 @@
 import asyncio
-import ccxt
 import time
-import numpy as np
-from tqdm import tqdm
-import discord
-from discord.ext import commands
-from utils.get_emoji import get_emoji
-from utils import calculate_MA, calculate_RSI
 
-TOKEN = ''
+import ccxt
+import discord
+import numpy as np
+from discord.ext import commands, tasks
+from tqdm import tqdm
+
+from utils import calculate_MA, calculate_RSI
+from utils.get_emoji import get_emoji
+
+TOKEN = 'ODI1MzI0MTQwMzM5OTIwOTM2.YF8RAA.zJAeyl1EV2GV5nXnScr1BDxsGL4'
 CHANNEL_ID = 819248630908846152
 
 tuanlu = '<:tuanlu:823863394188394496>'
@@ -37,9 +39,9 @@ class Porsche(discord.Client):
         self.MA7_alerted = []
         self.MA25_alerted = []
         # create the background task and run it in the background
-        self.rsi_noti = self.loop.create_task(self.rsi_noti())
-        self.ma_noti = self.loop.create_task(self.see_the_future())
-        self.update = self.loop.create_task(self.update_pairs())
+        self.rsi_noti.start()
+        self.see_the_future.start()
+        self.update_pairs.start()
 
     async def on_ready(self):
         print('Logged in as')
@@ -47,6 +49,7 @@ class Porsche(discord.Client):
         print(self.user.id)
         print('------')
 
+    @tasks.loop(seconds=3600)
     async def see_the_future(self):
         await self.wait_until_ready()
         channel = self.get_channel(CHANNEL_ID)  # channel ID goes here
@@ -66,10 +69,10 @@ class Porsche(discord.Client):
                         self.MA7_alerted.append(symbol)
                         emoji = get_emoji(last_price, MA7)
                         await channel.send(f"TF{tf.upper()}{emoji}: {symbol} is close to MA7 line, last price is {last_price:.7g}, MA7 price is {MA7:.7g}")
-                    print(f"TF{tf.upper()}{symbol}: Price {last_price}")
+                    print(f"TF{tf.upper()} {symbol}: Price {last_price}")
             # await channel.send("Bot is still running")
-            await asyncio.sleep(900)  # task runs every 15 minutes
-
+            
+    @tasks.loop(seconds=300)
     async def rsi_noti(self):
         await self.wait_until_ready()
         channel = self.get_channel(CHANNEL_ID)  # channel ID goes here
@@ -85,9 +88,10 @@ class Porsche(discord.Client):
                         await channel.send(f"TF{tf.upper()}: {symbol}: RSI: {rsi_14}")
                     if rsi_14 < 20:
                         await channel.send(f"TF{tf.upper()}: {symbol}: RSI: {rsi_14}")
-                    print(f"TF{tf.upper()}{symbol}: RSI14 {rsi_14}")
-            await asyncio.sleep(300)  # task runs every 5 minutes
+                    print(f"TF{tf.upper()} {symbol}: RSI14 {rsi_14}")
+            
 
+    @tasks.loop(seconds=12*3600)
     async def update_pairs(self):
         await self.wait_until_ready()
         channel = self.get_channel(CHANNEL_ID)
@@ -107,7 +111,7 @@ class Porsche(discord.Client):
             self.MA7_alerted = []
             self.MA25_alerted = []
             await channel.send(f"Size of watching token list {len(self.watching_pairs)}")
-            await asyncio.sleep(7200)
+            
 
     async def on_message(self, message):
         # we do not want the bot to reply to itself
