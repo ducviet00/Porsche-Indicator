@@ -19,8 +19,6 @@ class Porsche(discord.Client):
         super().__init__(*args, **kwargs)
 
         self.exchange = ccxt.binance({
-            'apiKey': 'YOUR_API_KEY',
-            'secret': 'YOUR_SECRET',
             'enableRateLimit': True,  # required https://github.com/ccxt/ccxt/wiki/Manual#rate-limit
             'options': {
                 'defaultType': 'spot',
@@ -28,8 +26,6 @@ class Porsche(discord.Client):
         })
         self.exchange.load_markets()
         self.exchange_futures = ccxt.binance({
-            'apiKey': 'YOUR_API_KEY',
-            'secret': 'YOUR_SECRET',
             'enableRateLimit': True,  # required https://github.com/ccxt/ccxt/wiki/Manual#rate-limit
             'options': {
                 'defaultType': 'future',
